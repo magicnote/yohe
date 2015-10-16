@@ -22,7 +22,7 @@ class YoheCommand():
     def get_vhosts(self, paths):
         apache_dir = self._getSetting('apache_dir')
         try:
-            input = open(apache_dir+'\\conf\\extra\\httpd-vhosts.conf', 'r')
+            input = open(apache_dir + '\\conf\\extra\\httpd-vhosts.conf', 'r')
         except Exception:
             return sublime.error_message('apache directory not found')
         content = input.read()
@@ -30,7 +30,7 @@ class YoheCommand():
         list = re.findall('<VirtualHost[^<#]*<', content)
         vhosts = []
         for item in list:
-            arr_item = re.sub("[\n\s]+", " ", item).split(' ')
+            arr_item = re.sub('[\n\s]+', ' ', item).split(' ')
             vhosts.append(self._getHost(arr_item))
         return vhosts
 
@@ -62,7 +62,14 @@ class yoho_openCommand(sublime_plugin.WindowCommand, YoheCommand):
     def run(self, paths=[], parameters=None):
         path = self.get_path(paths).replace('\\', '/')
         vhosts = self.get_vhosts('')
-        url = self.match_url(path, vhosts)
-        if(url == None):
-            return sublime.error_message('vhost not found')
-        webbrowser.open_new("http://" + url)
+        while True:
+            url = self.match_url(path, vhosts)
+            if(url != None):
+                webbrowser.open_new('http://' + url)
+                return
+            path = re.sub('/[^/]*$', '',path)
+            if(path.count('/') <= 1):
+                break
+
+        return sublime.error_message('vhost not found')
+
