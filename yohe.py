@@ -99,6 +99,6 @@ class OpenGitCommand(sublime_plugin.WindowCommand, YoheCommand):
 class OpenGitExCommand(sublime_plugin.WindowCommand, YoheCommand):
 
     def run(self, paths=[]):
-        command = openGitCommand(self.window)
+        command = OpenGitCommand(self.window)
         command.run(paths)
         return
