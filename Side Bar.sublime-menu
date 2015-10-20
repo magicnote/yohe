@@ -1,3 +1,4 @@
 [
-	{ "caption": "Open In Bowser", "command": "yoho_open", "args": {"paths": []} }
+	{ "caption": "Open In Bowser", "command": "yoho_open_web", "args": {"paths": []} },
+    { "caption": "Open In Git", "command": "yoho_open_git", "args": {"paths": []} }
 ]

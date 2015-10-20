@@ -5,4 +5,6 @@ Sublime Text 3 Plugin
 
 
 * `Open In Browser`
-  自动打开当前项目在Apache中对应virtual host。
+   自动打开当前项目在Apache中对应virtual host。
+* `Open In Git`
+   在当前目录的打开Git。
