@@ -19,6 +19,7 @@ class YoheCommand():
         else:
             sublime.error_message('yoho: Unkonw Error')
             return False
+
     def get_git_path(self):
         git_dir = self._getSetting('git_dir');
         if(git_dir == None):
@@ -62,7 +63,6 @@ class YoheCommand():
         settings = sublime.load_settings('yohe.sublime-settings')
         return settings.get(key)
 
-
 class OpenWebCommand(sublime_plugin.WindowCommand, YoheCommand):
 
     def run(self, paths=[], parameters=None):
@@ -71,34 +71,33 @@ class OpenWebCommand(sublime_plugin.WindowCommand, YoheCommand):
         while True:
             url = self.match_url(path, vhosts)
             if(url != None):
-                webbrowser.open_new('http://' + url)
-                return
-            path = re.sub('/[^/]*$', '',path)
+                return webbrowser.open_new('http://' + url)
+            os.path.dirname(path)
             if(path.count('/') <= 1):
                 break
 
         return sublime.error_message('vhost not found')
-
-
 
 class OpenGitCommand(sublime_plugin.WindowCommand, YoheCommand):
 
     def run(self, paths=[]):
         path = self.get_path(paths).replace('\\', '/')
         git  = self.get_git_path()
-        while True:
-            if(os.path.isdir(path)):
-                print(git + ' --login -i')
-                if(subprocess.Popen(git + ' --login -i', cwd=path)):
-                    return
-                else:
-                     return sublime.error_message('yoho: Unkonw Error')
-            path = re.sub('/[^/]*$', '',path)
-
+        if(not os.path.isdir(path)):
+            path = os.path.dirname(path)
+        if(not subprocess.Popen(git + ' --login -i', cwd=path)):
+            return sublime.error_message('yoho: Unkonw Error')
 
 class OpenGitExCommand(sublime_plugin.WindowCommand, YoheCommand):
 
     def run(self, paths=[]):
         command = OpenGitCommand(self.window)
         command.run(paths)
-        return
+
+class OpenFolderCommand(sublime_plugin.WindowCommand, YoheCommand):
+
+    def run(self, paths=[]):
+        path = self.get_path(paths).replace('\\', '/')
+        if(not os.path.isdir(path)):
+            path = os.path.dirname(path)
+        os.startfile(path)
