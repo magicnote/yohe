@@ -72,7 +72,7 @@ class OpenWebCommand(sublime_plugin.WindowCommand, YoheCommand):
             url = self.match_url(path, vhosts)
             if(url != None):
                 return webbrowser.open_new('http://' + url)
-            os.path.dirname(path)
+            path = os.path.dirname(path)
             if(path.count('/') <= 1):
                 break
 
