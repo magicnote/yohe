@@ -1,6 +1,8 @@
-{
+﻿{
     //apache 根目录
     "apache_dir":"",
     //git 根目录
-    "git_dir":""
+    "git_dir":"",
+    //node 根目录
+    "nodejs_dir":"",
 }

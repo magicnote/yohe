@@ -4,6 +4,39 @@ import re
 import webbrowser
 import os
 import subprocess
+import codecs
+
+
+PLUGIN_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
+class unit():
+
+    def save_in_file_cache(buff):
+        temp_file_name = '.__Cache__'
+        temp_file_path = PLUGIN_DIR + '/' + temp_file_name
+        try:
+            output =  open(temp_file_path, mode='w', encoding='utf-8')
+            output.write(buff)
+            output.close()
+            return temp_file_path;
+        except Exception:
+            sublime.error_message('cache write failed')
+
+
+    def read_file(filePath,errMessages):
+        try:
+            input =  open(filePath, mode='r', encoding='utf-8')
+            content = input.read()
+            input.close()
+            return content
+        except Exception:
+            sublime.error_message(errMessages)
+
+    def get_setting(key):
+        settings = sublime.load_settings('yohe.sublime-settings')
+        return settings.get(key)
+
 
 class YoheCommand():
 
@@ -21,24 +54,20 @@ class YoheCommand():
             return False
 
     def get_git_path(self):
-        git_dir = self._getSetting('git_dir');
+        git_dir = unit.get_setting('git_dir');
         if(git_dir == None):
             sublime.error_message('git not found')
         return git_dir.replace('\\', '/') + '/bin/sh.exe';
 
     def get_vhosts(self, paths):
-        apache_dir = self._getSetting('apache_dir')
-        try:
-            input = open(apache_dir + '\\conf\\extra\\httpd-vhosts.conf', 'r')
-        except Exception:
-            return sublime.error_message('apache directory not found')
-        content = input.read()
-        input.close()
+        apache_dir = unit.get_setting('apache_dir')
+        content = unit.read_file(apache_dir + '\\conf\\extra\\httpd-vhosts.conf',
+            'apache directory not found')
         list = re.findall('<VirtualHost[^<#]*<', content)
         vhosts = []
         for item in list:
             arr_item = re.sub('[\n\s]+', ' ', item).split(' ')
-            vhosts.append(self._getHost(arr_item))
+            vhosts.append(self._get_vhost(arr_item))
         return vhosts
 
     def match_url(self, path, vhosts):
@@ -47,8 +76,8 @@ class YoheCommand():
                 return host[0]
         return None
 
-    # host format : [baseAddress, dir]
-    def _getHost(self, arr):
+    # vhost format : [baseAddress, dir]
+    def _get_vhost(self, arr):
         host = []
         for index, value in enumerate(arr):
             if(re.search('VirtualHost', value) != None):
@@ -59,9 +88,6 @@ class YoheCommand():
                 host.append(arr[i])
         return host
 
-    def _getSetting(self, key):
-        settings = sublime.load_settings('yohe.sublime-settings')
-        return settings.get(key)
 
 class OpenWebCommand(sublime_plugin.WindowCommand, YoheCommand):
 
@@ -75,7 +101,6 @@ class OpenWebCommand(sublime_plugin.WindowCommand, YoheCommand):
             path = os.path.dirname(path)
             if(path.count('/') <= 1):
                 break
-
         return sublime.error_message('vhost not found')
 
 class OpenGitCommand(sublime_plugin.WindowCommand, YoheCommand):
@@ -101,3 +126,14 @@ class OpenFolderCommand(sublime_plugin.WindowCommand, YoheCommand):
         if(not os.path.isdir(path)):
             path = os.path.dirname(path)
         os.startfile(path)
+
+class FormaterCommand(sublime_plugin.TextCommand, YoheCommand):
+    def run(self, edit):
+        entire_buffer_region = sublime.Region(0, self.view.size())
+        cache_file_path = unit.save_in_file_cache(self.view.substr(entire_buffer_region))
+        nodejs_dir = unit.get_setting('nodejs_dir')
+        cmd = [nodejs_dir + '/node', PLUGIN_DIR + '/js-beautify.js', cache_file_path]
+        subprocess.call(cmd)
+        cache = unit.read_file(cache_file_path, 'cache read failed');
+        os.remove(cache_file_path)
+        self.view.replace(edit, entire_buffer_region, cache)

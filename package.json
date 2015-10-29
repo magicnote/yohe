@@ -1,0 +1,22 @@
+{
+  "name": "yohe-nodejs",
+  "version": "1.0.0",
+  "description": "yohe nodejs modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magicnote/yohe.git"
+  },
+  "author": "xyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/magicnote/yohe/issues"
+  },
+  "homepage": "https://github.com/magicnote/yohe#readme",
+  "dependencies": {
+    "js-beautify": "1.5.*"
+  }
+}

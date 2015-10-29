@@ -1,4 +1,11 @@
 [
     { "caption": "-", "id": "file" },
-    { "command": "open_git_ex", "caption": "Open In Git" }
+    { "command": "open_git_ex", "caption": "Open In Git" },
+    {
+      "caption":"formater",
+      "children":[
+        { "command": "Formater", "caption": "Html/JavaScript" }
+      ]
+    }
+
 ]
