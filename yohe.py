@@ -128,12 +128,18 @@ class OpenFolderCommand(sublime_plugin.WindowCommand, YoheCommand):
         os.startfile(path)
 
 class FormaterCommand(sublime_plugin.TextCommand, YoheCommand):
-    def run(self, edit):
-        entire_buffer_region = sublime.Region(0, self.view.size())
-        cache_file_path = unit.save_in_file_cache(self.view.substr(entire_buffer_region))
-        nodejs_dir = unit.get_setting('nodejs_dir')
-        cmd = [nodejs_dir + '/node', PLUGIN_DIR + '/js-beautify.js', cache_file_path]
-        subprocess.call(cmd)
-        cache = unit.read_file(cache_file_path, 'cache read failed');
-        os.remove(cache_file_path)
-        self.view.replace(edit, entire_buffer_region, cache)
+    def run(self, edit, **args):
+        type =args['type'];
+        if (type == 'html' or type == 'js' or type == 'css'):
+            entire_buffer_region = sublime.Region(0, self.view.size())
+            cache_file_path = unit.save_in_file_cache(self.view.substr(entire_buffer_region))
+            nodejs_dir = unit.get_setting('nodejs_dir')
+
+            cmd = [nodejs_dir + '/node', PLUGIN_DIR + '/js-beautify.js', type, cache_file_path]
+            subprocess.call(cmd)
+
+            cache = unit.read_file(cache_file_path, 'cache read failed');
+            os.remove(cache_file_path)
+            self.view.replace(edit, entire_buffer_region, cache)
+        elif(type == 'php'):
+             self.view.run_command('fmt_now')

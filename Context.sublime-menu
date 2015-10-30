@@ -1,11 +1,48 @@
 [
-    { "caption": "-", "id": "file" },
-    { "command": "open_git_ex", "caption": "Open In Git" },
     {
-      "caption":"formater",
-      "children":[
-        { "command": "formater", "caption": "Html/JavaScript" }
-      ]
+        "caption": "-",
+        "id": "file"
+    },
+    {
+        "command": "open_git_ex",
+        "caption": "Open In Git"
+    },
+    {
+        "caption": "formater",
+        "children":
+        [
+            {
+                "command": "formater",
+                "caption": "php",
+                "args":
+                {
+                    "type": "php"
+                }
+            },
+            {
+                "command": "formater",
+                "caption": "javascript",
+                "args":
+                {
+                    "type": "js"
+                }
+            },
+            {
+                "command": "formater",
+                "caption": "html",
+                "args":
+                {
+                    "type": "html"
+                }
+            },
+            {
+                "command": "formater",
+                "caption": "css",
+                "args":
+                {
+                    "type": "css"
+                }
+            },
+        ]
     }
-
 ]
