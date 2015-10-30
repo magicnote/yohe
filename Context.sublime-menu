@@ -4,7 +4,7 @@
     {
       "caption":"formater",
       "children":[
-        { "command": "Formater", "caption": "Html/JavaScript" }
+        { "command": "formater", "caption": "Html/JavaScript" }
       ]
     }
 
