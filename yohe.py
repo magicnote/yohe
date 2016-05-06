@@ -3,6 +3,7 @@ import sublime_plugin
 import re
 import webbrowser
 import os
+import sys
 import subprocess
 import codecs
 
@@ -72,20 +73,22 @@ class YoheCommand():
 
     def match_url(self, path, vhosts):
         for host in vhosts:
-            if(re.search(path, host[1])):
-                return host[0]
+            if(re.search(path, host['root'])):
+                return host['ServerName'] if 'ServerName' in host else host['ip']
         return None
 
     # vhost format : [baseAddress, dir]
     def _get_vhost(self, arr):
-        host = []
+        host = {}
+        #arr data fomrat : ['key', 'value', 'key', 'value']
         for index, value in enumerate(arr):
+            i = index + 1
+            if(re.search('ServerName', value) != None):
+                host['ServerName']= arr[i];
             if(re.search('VirtualHost', value) != None):
-                i = index + 1
-                host.append(arr[i].replace('>', '').replace('*', '127.0.0.1'))
+                host['ip'] = arr[i].replace('>', '').replace('*', '127.0.0.1');
             if(value == 'DocumentRoot'):
-                i = index + 1
-                host.append(arr[i])
+                host['root'] = arr[i];
         return host
 
 
@@ -94,6 +97,7 @@ class OpenWebCommand(sublime_plugin.WindowCommand, YoheCommand):
     def run(self, paths=[], parameters=None):
         path = self.get_path(paths)
         vhosts = self.get_vhosts('')
+   
         while True:
             url = self.match_url(path, vhosts)
             if(url != None):
