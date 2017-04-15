@@ -5,4 +5,14 @@
     "git_dir":"",
     //node 根目录
     "nodejs_dir":"",
+
+    /* php-fmt */
+    "version": 4,
+    "php_bin":"/usr/local/bin/php",
+    "format_on_save":false,
+    "psr1":true,
+    "psr1_naming":false,
+    "psr2":true,
+    "indent_with_space":false,
+ 
 }
