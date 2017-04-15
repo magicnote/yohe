@@ -131,6 +131,17 @@ class OpenFolderCommand(sublime_plugin.WindowCommand, YoheCommand):
             path = os.path.dirname(path)
         os.startfile(path)
 
+class LintPhpCommand(sublime_plugin.TextCommand, YoheCommand):
+
+    def run(self, paths=[]):
+        entire_buffer_region = sublime.Region(0, self.view.size())
+        cache_file_path = unit.save_in_file_cache(self.view.substr(entire_buffer_region))
+        print(cache_file_path)
+        p = subprocess.Popen('php -l "' + cache_file_path + '"', stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        output = p.communicate()[0]   
+        os.remove(cache_file_path) 
+        sublime.message_dialog(str(output, 'utf-8').replace(cache_file_path, 'file'));
+
 class FormaterCommand(sublime_plugin.TextCommand, YoheCommand):
     def run(self, edit, **args):
         type =args['type'];

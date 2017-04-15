@@ -3,6 +3,10 @@
         "caption": "-",
         "id": "file"
     },
+     {
+        "command": "lint_php",
+        "caption": "Lint this php"
+    },
     {
         "command": "open_git_ex",
         "caption": "Open In Git"

@@ -14,6 +14,7 @@ Sublime Text 3 Plugin。
 
 ##### 为Sublime Text内容菜单添加以下功能:
 
+* `Lint this php` 检查php语法错误(使用当前环境变量的php版本)
 * `Formater`
 	* `php`  (已整合[sublime-phpfmt]( https://github.com/nanch/sublime-phpfmt/tree/6125cf9058c0666f06ed758f0f5451996f7c7211)最后可用版本)
 	* `javascript`
