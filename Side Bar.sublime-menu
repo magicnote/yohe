@@ -2,6 +2,6 @@
 
     { "caption": "Open In Bowser", "command": "open_web", "args": {"paths": []} },
     { "caption": "Open In Git", "command": "open_git", "args": {"paths": []} },
-   
+    { "caption": "Open In Folder", "command": "open_folder", "args": {"paths": []} }
 
 ]

@@ -4,12 +4,12 @@ Sublime Text 3 Plugin。
 
 ##### 为Sublime Text右侧菜单添加以下功能:
 
-* `Open In Browser`
+* `Open In Browser`  
    自动打开当前项目在apache中对应virtual host。
    如果设置了ServerName，优先使用ServerName访问，否则使用IP:Port形式访问。
-* `Open In Git`
+* `Open In Git`  
    在当前目录的打开git。
-* `Open In Folder` (移除)
+* `Open In Folder`  
    在资源管理器中打开文件目录。
 
 ##### 为Sublime Text内容菜单添加以下功能:
